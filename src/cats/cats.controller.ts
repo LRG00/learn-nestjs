@@ -1,5 +1,6 @@
-import { UseInterceptors, UseGuards, UsePipes, UseFilters, Controller, Get, Post, Param, Req, Res, HttpStatus, Query, Body, Delete, Put, HttpException } from '@nestjs/common';
+import { UseInterceptors, UseGuards, UsePipes, UseFilters, Controller, Get, Post, Param, Req, Res, HttpStatus, Query, Body, Delete, Put, HttpException, UploadedFile } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ForbiddenException } from '../exception/forbidden.exception';
 import { CreateCatDto, ListAllEntities } from './create-cat.dto'
 import { CatsService } from './cats.service';
@@ -8,7 +9,9 @@ import { LoggingInterceptor } from '../interceptors/logging.interceptor';
 import { TransformInterceptor } from '../interceptors/transform.interceptor';
 import { RolesGuard } from '../guard/roles.guard';
 import { Roles } from '../decorator/roles.decorator';
-
+import * as fs from 'fs';
+import * as path from 'path';
+import { diskStorage } from 'multer'
 @Controller('cats')
 @UseGuards(RolesGuard)
 @UseInterceptors(LoggingInterceptor, TransformInterceptor)
@@ -30,7 +33,20 @@ export class CatsController {
   async findAll() {
     throw new ForbiddenException();
   }
-
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file', {
+    storage: diskStorage({
+      destination: './uploads'
+      , filename: (req, file, cb) => {
+        const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('')
+        cb(null, `${randomName}${path.extname(file.originalname)}`)
+      }
+    })
+  }))
+  uploadFile(@UploadedFile() file) {
+    console.log(file, '00000000000');
+    return file
+  }
   @Get(':id')
   findOne(@Param() params): string {
     console.log(params.id);
