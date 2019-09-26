@@ -3,12 +3,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
 import { EventsModule } from './events/events.module';
+import { MessagesModule } from './message/messages.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
     CatsModule,
     EventsModule,
+    MessagesModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: '120.77.239.216',
