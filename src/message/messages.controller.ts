@@ -8,8 +8,8 @@ export class MessagesController {
   constructor(private readonly messagesService: MessagesService) { }
 
   @Get()
-  findAll(): Promise<Message[]> {
-    return this.messagesService.findAll();
+  findAll() {
+    return this.messagesService.manyToMany();
   }
   @Post()
   create(@Body() CreateMessageDto: CreateMessageDto) {

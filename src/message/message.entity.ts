@@ -1,5 +1,5 @@
 // messages/message.entity.ts
-import { Column, Entity, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
+import {Column, Entity,PrimaryGeneratedColumn, BaseEntity} from "typeorm";
 
 // 这里可以修改表名
 // @Entity('messages')
